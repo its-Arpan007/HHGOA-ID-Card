@@ -1,0 +1,868 @@
+/* ==========================================================================
+   HH GOA 2026 - BUILDER ID & PFP FRAME GENERATOR STYLES
+   ========================================================================== */
+
+:root {
+  --primary-green: #0D5C3A;
+  --dark-green: #073B24;
+  --light-green: #E8F5E9;
+  --bg-dark: #0F172A;
+  --bg-card: #1E293B;
+  --bg-input: #334155;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border-color: #334155;
+  --accent-blue: #38BDF8;
+  --hacker-yellow: #FACC15;
+  --pink-accent: #E91E63;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Container Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.app-header {
+  min-height: 75px;
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.app-logo-img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.logo-text h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.badge-tag {
+  font-size: 0.75rem;
+  color: var(--hacker-yellow);
+  background: rgba(250, 204, 21, 0.15);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green), #15803D);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(13, 92, 58, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 92, 58, 0.6);
+  background: linear-gradient(135deg, #106E47, #166534);
+}
+
+.btn-x {
+  background: #000000;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.btn-x:hover {
+  background: #1DA1F2;
+  border-color: #1DA1F2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 161, 242, 0.4);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-text {
+  background: transparent;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  margin-top: 6px;
+}
+
+.btn-text:hover {
+  text-decoration: underline;
+}
+
+.btn-sm-action {
+  background: rgba(250, 204, 21, 0.15);
+  color: var(--hacker-yellow);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-sm-action:hover {
+  background: var(--hacker-yellow);
+  color: #000;
+}
+
+/* Workspace Layout */
+.workspace {
+  display: flex;
+  flex: 1;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Sidebar Controls */
+.control-panel {
+  width: 400px;
+  flex-shrink: 0;
+}
+
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Format Selector */
+.format-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toggle-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: var(--primary-green);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(13, 92, 58, 0.4);
+}
+
+.panel-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-wrapper input:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(13, 92, 58, 0.25);
+}
+
+/* Upload Dropzone */
+.upload-dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  background: rgba(15, 23, 42, 0.4);
+  transition: all 0.2s ease;
+}
+
+.upload-dropzone:hover, .upload-dropzone.dragover {
+  border-color: var(--primary-green);
+  background: rgba(13, 92, 58, 0.1);
+}
+
+.file-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-input);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  color: var(--accent-blue);
+}
+
+.upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.upload-text .primary-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.upload-text .sub-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Image Controls */
+.image-controls {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.85rem;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.control-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100px;
+}
+
+.control-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--primary-green);
+}
+
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Preview Stage */
+.preview-stage {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.stage-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.stage-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+}
+
+.hashtag-badge {
+  font-size: 0.85rem;
+  background: rgba(233, 30, 99, 0.15);
+  border: 1px solid rgba(233, 30, 99, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  color: #F472B6;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.card-display-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  background: radial-gradient(circle at center, #1E293B 0%, #0F172A 100%);
+  overflow: auto;
+}
+
+/* ==========================================================================
+   FORMAT B: BUILDER ID CARD DESIGN
+   ========================================================================== */
+
+.id-card {
+  width: 440px;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  flex-shrink: 0;
+  border-radius: 32px;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.template-bg-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.card-overlay-content {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Hacker House Goa Logo */
+.card-logo-container {
+  position: absolute;
+  top: 58px; /* Shifted down by ~20px */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  text-align: center;
+  pointer-events: none;
+}
+
+.card-logo-img {
+  width: 145px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+
+/* Profile Photo Frame in Sun */
+.photo-container {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.photo-frame {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 5px solid var(--primary-green);
+  background-color: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.photo-frame:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.1s ease-out;
+}
+
+.photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--primary-green);
+  width: 100%;
+  height: 100%;
+  background: #F1F8F4;
+}
+
+.photo-placeholder i {
+  width: 42px;
+  height: 42px;
+}
+
+.photo-placeholder span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* User Info & Builder Title Pill */
+.user-info {
+  position: absolute;
+  top: 71%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.builder-title-pill {
+  background: linear-gradient(135deg, #0D5C3A, #073B24);
+  color: var(--hacker-yellow);
+  border: 2px solid var(--hacker-yellow);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(13, 92, 58, 0.25);
+  max-width: 340px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--primary-green);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  word-break: break-word;
+  max-width: 380px;
+}
+
+.card-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  word-break: break-word;
+  max-width: 380px;
+}
+
+/* ==========================================================================
+   FORMAT A: PFP FRAME OVERLAY DESIGN
+   ========================================================================== */
+
+.pfp-card {
+  width: 480px;
+  height: 480px;
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+  background: var(--primary-green);
+  flex-shrink: 0;
+}
+
+.pfp-canvas-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.pfp-photo-box {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pfp-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pfp-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #94A3B8;
+}
+
+.pfp-placeholder i {
+  width: 54px;
+  height: 54px;
+}
+
+/* Tropical Ring Overlay for PFP */
+.pfp-ring-overlay {
+  position: absolute;
+  inset: 0;
+  border: 18px solid var(--primary-green);
+  border-radius: 24px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.pfp-header-badge {
+  background: #000000;
+  color: var(--hacker-yellow);
+  border: 2px solid var(--hacker-yellow);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 6px 18px;
+  border-radius: 20px;
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.pfp-overlay-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.7));
+  margin-top: 10px;
+}
+
+.pfp-footer-tag {
+  background: var(--pink-accent);
+  color: #FFFFFF;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  padding: 6px 20px;
+  border-radius: 25px;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 14px rgba(233, 30, 99, 0.5);
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE MEDIA QUERIES (PHONES & TABLETS)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .app-header {
+    height: auto;
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .logo-area {
+    justify-content: center;
+  }
+
+  .app-logo-img {
+    height: 38px;
+  }
+
+  .logo-text h1 {
+    font-size: 1.1rem;
+  }
+
+  .header-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .header-actions .btn {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+
+  .workspace {
+    padding: 0.75rem;
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  .control-panel {
+    width: 100%;
+  }
+
+  .panel-card {
+    padding: 1.15rem;
+    gap: 1rem;
+    border-radius: 14px;
+  }
+
+  /* Prevent iOS input auto-zoom */
+  .input-wrapper input {
+    font-size: 16px;
+    padding: 12px 14px 12px 40px;
+  }
+
+  .preview-stage {
+    border-radius: 14px;
+    min-height: 480px;
+  }
+
+  .stage-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .card-display-wrapper {
+    padding: 1rem 0.5rem;
+  }
+
+  /* Responsive Fluid Scaling for ID Card on Mobile Screens */
+  .id-card {
+    width: min(440px, 92vw);
+    border-radius: min(32px, 7vw);
+  }
+
+  .card-logo-container {
+    top: 9%;
+  }
+
+  .card-logo-img {
+    width: min(145px, 32vw);
+  }
+
+  .photo-container {
+    top: 47%;
+  }
+
+  .photo-frame {
+    width: min(190px, 42vw);
+    height: min(190px, 42vw);
+  }
+
+  .user-info {
+    top: 71%;
+  }
+
+  .card-name {
+    font-size: clamp(1.1rem, 5vw, 1.6rem);
+  }
+
+  .card-role {
+    font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+  }
+
+  .builder-title-pill {
+    font-size: clamp(0.65rem, 2.6vw, 0.8rem);
+    padding: 3px 10px;
+  }
+
+  /* Responsive Fluid Scaling for PFP Card on Mobile Screens */
+  .pfp-card {
+    width: min(480px, 92vw);
+    height: min(480px, 92vw);
+    border-radius: min(24px, 5vw);
+  }
+
+  .pfp-ring-overlay {
+    border-width: min(18px, 4vw);
+    padding: 12px;
+  }
+
+  .pfp-overlay-logo {
+    height: min(80px, 16vw);
+  }
+
+  .pfp-header-badge {
+    font-size: clamp(0.7rem, 2.8vw, 0.9rem);
+    padding: 4px 12px;
+  }
+
+  .pfp-footer-tag {
+    font-size: clamp(0.8rem, 3.2vw, 1.1rem);
+    padding: 4px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toggle-btn {
+    font-size: 0.75rem;
+    padding: 8px 4px;
+  }
+
+  .hashtag-badge {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HH Goa 2026 - Builder ID & PFP Frame Generator</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- heic2any for iPhone HEIC photo support -->
+  <script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js"></script>
+  <!-- html2canvas for HD image export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Navbar -->
+    <header class="app-header">
+      <div class="logo-area">
+        <img src="logo.png" alt="Hacker House Goa Logo" class="app-logo-img">
+        <div class="logo-text">
+          <h1>Hacker House Goa 2026</h1>
+          <span class="badge-tag">Official Frame & ID Studio</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="shareXBtnTop" class="btn btn-x">
+          <i data-lucide="twitter"></i> Share to X (#FrameInGoa)
+        </button>
+        <button id="exportBtn" class="btn btn-primary">
+          <i data-lucide="download"></i> Download PNG
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Control Panel Sidebar -->
+      <aside class="control-panel">
+        <div class="panel-card">
+          
+          <!-- Format Selector Toggle -->
+          <div class="format-selector">
+            <label class="form-label">Graphic Format</label>
+            <div class="toggle-group">
+              <button id="modeIdCard" class="toggle-btn active" data-mode="idcard">
+                <i data-lucide="id-card"></i> Format B: Builder ID Card
+              </button>
+              <button id="modePfp" class="toggle-btn" data-mode="pfp">
+                <i data-lucide="user-circle"></i> Format A: PFP Frame
+              </button>
+            </div>
+          </div>
+
+          <h2 class="panel-title"><i data-lucide="sliders"></i> Customize Details</h2>
+          
+          <!-- Photo Upload Section -->
+          <div class="form-group">
+            <label class="form-label">Upload Photo (JPG, PNG, HEIC)</label>
+            <div class="upload-dropzone" id="dropzone">
+              <input type="file" id="photoInput" accept="image/*,.heic,.heif" class="file-input">
+              <div class="dropzone-content">
+                <div class="upload-icon-wrapper">
+                  <i data-lucide="upload-cloud"></i>
+                </div>
+                <div class="upload-text">
+                  <span class="primary-text">Click or drag & drop photo</span>
+                  <span class="sub-text">Supports iPhone HEIC, JPG, PNG</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Framing & Zoom Controls -->
+            <div class="image-controls hidden" id="imageControls">
+              <div class="control-row">
+                <label><i data-lucide="zoom-in"></i> Zoom</label>
+                <input type="range" id="zoomSlider" min="0.5" max="3" step="0.05" value="1">
+              </div>
+              <div class="control-row">
+                <label><i data-lucide="move-horizontal"></i> Position X</label>
+                <input type="range" id="posXSlider" min="-120" max="120" step="1" value="0">
+              </div>
+              <div class="control-row">
+                <label><i data-lucide="move-vertical"></i> Position Y</label>
+                <input type="range" id="posYSlider" min="-120" max="120" step="1" value="0">
+              </div>
+              <button id="resetPhotoBtn" class="btn-text">
+                <i data-lucide="rotate-ccw"></i> Reset Framing
+              </button>
+            </div>
+          </div>
+
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="nameInput" class="form-label">Full Name</label>
+            <div class="input-wrapper">
+              <i data-lucide="user" class="input-icon"></i>
+              <input type="text" id="nameInput" placeholder="e.g. SUBHOJIT ROY" value="" maxlength="30">
+            </div>
+          </div>
+
+          <!-- Stack / Role Field -->
+          <div class="form-group">
+            <label for="roleInput" class="form-label">Tech Stack / Role</label>
+            <div class="input-wrapper">
+              <i data-lucide="code" class="input-icon"></i>
+              <input type="text" id="roleInput" placeholder="e.g. FULL STACK / SOLANA" value="" maxlength="35">
+            </div>
+          </div>
+
+          <!-- Fun Builder Title Field -->
+          <div class="form-group">
+            <div class="label-with-action">
+              <label for="titleInput" class="form-label">Builder Title</label>
+              <button id="randomTitleBtn" class="btn-sm-action">
+                <i data-lucide="shuffle"></i> Randomize
+              </button>
+            </div>
+            <div class="input-wrapper">
+              <i data-lucide="sparkles" class="input-icon"></i>
+              <input type="text" id="titleInput" placeholder="e.g. GOA CODE CHAD" value="🌴 GOA CODE CHAD" maxlength="30">
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="panel-actions">
+            <button id="shareXBtn" class="btn btn-x btn-block">
+              <i data-lucide="twitter"></i> Share on X (#FrameInGoa)
+            </button>
+            <button id="downloadBtn" class="btn btn-primary btn-block">
+              <i data-lucide="download"></i> Download Graphic (PNG)
+            </button>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Live Preview Area -->
+      <section class="preview-stage">
+        <div class="stage-header">
+          <span class="stage-label"><i data-lucide="eye"></i> Live Graphic Preview</span>
+          <div class="hashtag-badge">#FrameInGoa</div>
+        </div>
+
+        <div class="card-display-wrapper">
+          
+          <!-- FORMAT B: ID CARD ELEMENT -->
+          <div id="idCard" class="id-card preview-element">
+            <!-- Background Image -->
+            <img src="template.jpg" alt="HH Goa Template" class="template-bg-img">
+
+            <div class="card-overlay-content">
+              <!-- Logo shifted down by ~20px -->
+              <div class="card-logo-container">
+                <img src="logo.png" alt="Hacker House Goa" class="card-logo-img">
+              </div>
+
+              <!-- Profile Photo in Middle of Sun -->
+              <div class="photo-container">
+                <div class="photo-frame" id="photoFrame">
+                  <img id="profilePhoto" src="" alt="Profile Picture" class="profile-img hidden">
+                  <div id="photoPlaceholder" class="photo-placeholder">
+                    <i data-lucide="camera"></i>
+                    <span>Upload Photo</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Name, Stack & Title in White Section -->
+              <div class="user-info">
+                <div id="cardTitleBadge" class="builder-title-pill">🌴 GOA CODE CHAD</div>
+                <h2 id="cardName" class="card-name">Niladri Kundu</h2>
+                <p id="cardRole" class="card-role">FULL STACK / AI BUILDER</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FORMAT A: PFP FRAME OVERLAY ELEMENT (Initially Hidden) -->
+          <div id="pfpFrame" class="pfp-card preview-element hidden">
+            <div class="pfp-canvas-wrapper">
+              <!-- User Photo -->
+              <div class="pfp-photo-box">
+                <img id="pfpProfilePhoto" src="" alt="Profile Picture" class="pfp-profile-img hidden">
+                <div id="pfpPlaceholder" class="pfp-placeholder">
+                  <i data-lucide="camera"></i>
+                  <span>Upload PFP</span>
+                </div>
+              </div>
+              
+              <!-- PFP Tropical Ring Overlay -->
+              <div class="pfp-ring-overlay">
+                <div class="pfp-header-badge">HH GOA 2026</div>
+                <img src="logo.png" alt="Hacker House Goa" class="pfp-overlay-logo">
+                <div class="pfp-footer-tag">#FrameInGoa</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

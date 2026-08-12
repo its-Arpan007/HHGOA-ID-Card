@@ -1,16 +1,37 @@
 /**
- * HH GOA 2026 - BUILDER ID & PFP FRAME GENERATOR
- * Handles HEIC conversions, dual graphic format switching, title generator, framing, and X share flow.
+ * HACKER HOUSE GOA 2026 - BUILDER IDENTITY & PFP STUDIO
+ * Core Logic: Photo Upload, Camera Capture, HEIC Conversion, Dual Format Mode Switching,
+ * Dynamic Title Generator, Image Framing, Toast System, PNG Export & X Sharing.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // DOM Elements - Form Inputs
+  // DOM Elements - Inputs & Form Controls
   const nameInput = document.getElementById('nameInput');
   const roleInput = document.getElementById('roleInput');
   const titleInput = document.getElementById('titleInput');
   const photoInput = document.getElementById('photoInput');
   const dropzone = document.getElementById('dropzone');
+  const dropzonePrimaryText = document.getElementById('dropzonePrimaryText');
   const randomTitleBtn = document.getElementById('randomTitleBtn');
+
+  // Photo Action Buttons
+  const openCameraBtn = document.getElementById('openCameraBtn');
+  const triggerUploadBtn = document.getElementById('triggerUploadBtn');
+
+  // Camera Modal Elements
+  const cameraModal = document.getElementById('cameraModal');
+  const cameraBackdrop = document.getElementById('cameraBackdrop');
+  const closeCameraBtn = document.getElementById('closeCameraBtn');
+  const cancelCameraBtn = document.getElementById('cancelCameraBtn');
+  const cameraVideo = document.getElementById('cameraVideo');
+  const cameraSnapshot = document.getElementById('cameraSnapshot');
+  const faceGuide = document.getElementById('faceGuide');
+  const cameraLiveControls = document.getElementById('cameraLiveControls');
+  const cameraReviewControls = document.getElementById('cameraReviewControls');
+  const capturePhotoBtn = document.getElementById('capturePhotoBtn');
+  const retakePhotoBtn = document.getElementById('retakePhotoBtn');
+  const usePhotoBtn = document.getElementById('usePhotoBtn');
+  const switchCameraBtn = document.getElementById('switchCameraBtn');
 
   // Format Switching Buttons
   const modeIdCardBtn = document.getElementById('modeIdCard');
@@ -23,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const posYSlider = document.getElementById('posYSlider');
   const resetPhotoBtn = document.getElementById('resetPhotoBtn');
 
-  // Display Elements - ID Card (Format B)
+  // Display Elements - Format B: ID Card
   const idCard = document.getElementById('idCard');
   const cardName = document.getElementById('cardName');
   const cardRole = document.getElementById('cardRole');
@@ -32,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const photoPlaceholder = document.getElementById('photoPlaceholder');
   const photoFrame = document.getElementById('photoFrame');
 
-  // Display Elements - PFP Frame (Format A)
+  // Display Elements - Format A: PFP Frame
   const pfpFrame = document.getElementById('pfpFrame');
   const pfpProfilePhoto = document.getElementById('pfpProfilePhoto');
   const pfpPlaceholder = document.getElementById('pfpPlaceholder');
@@ -43,38 +64,266 @@ document.addEventListener('DOMContentLoaded', () => {
   const shareXBtn = document.getElementById('shareXBtn');
   const shareXBtnTop = document.getElementById('shareXBtnTop');
 
+  // Toast Container
+  const toastContainer = document.getElementById('toastContainer');
+
   // Application State
   let activeMode = 'idcard'; // 'idcard' or 'pfp'
   let currentZoom = 1;
   let currentPosX = 0;
   let currentPosY = 0;
   let rawImageDataURL = '';
+  let lastTitleIndex = -1;
 
-  // Fun Titles List
+  // Camera State
+  let currentStream = null;
+  let facingMode = 'user';
+  let capturedDataURL = '';
+
+  // Curated Hacker & Builder Titles (30 Titles)
   const funTitles = [
     '🌴 GOA CODE CHAD',
+    '🧠 AI ARCHITECT',
     '⚡ SOLANA WIZARD',
-    '🧠 AI ALCHEMIST',
+    '🔥 RUST WRANGLER',
+    '🔮 PROTOCOL SURFER',
     '🌊 WEB3 SURFER',
     '🚀 DEFI ARCHITECT',
-    '🔥 RUST WRANGLER',
-    '🏖️ BEACH BUILDER',
-    '💎 CYBERPUNK HACKER',
+    '💻 PROMPT MAGICIAN',
     '👑 FULLSTACK CHIEFTAIN',
     '🛠️ BUIDL LEGEND',
-    '💻 PROMPT MAGCIAN',
-    '🔮 PROTOCOL SURF'
+    '🏖️ BEACH BUILDER',
+    '💎 CYBERPUNK HACKER',
+    '👾 DEBUGGING DEMON',
+    '⚡ 10X PROBLEM SOLVER',
+    '🎯 SHIP IT ENGINEER',
+    '🎨 PIXEL PUSHER',
+    '🔌 API WIZARD',
+    '🌙 NIGHT SHIFT BUILDER',
+    '🏹 BUG HUNTER',
+    '☁️ CLOUD ARCHITECT',
+    '⚙️ SYSTEMS BEAST',
+    '🚀 ZERO TO SHIPPED',
+    '⚡ BUILD MODE: ON',
+    '⚔️ SMART CONTRACT SAMURAI',
+    '🌴 BEACH HACKER',
+    '🧬 DECENTRALIZED ALCHEMIST',
+    '🏗️ PRODUCT HACKER',
+    '🌐 OPEN SOURCE HERO',
+    '📦 PACKAGE MAESTRO',
+    '🧠 DEEP LEARNING CHAD'
   ];
 
-  // 1. Text Field Real-Time Binding
+  // -------------------------------------------------------------------------
+  // 1. Toast Notification System
+  // -------------------------------------------------------------------------
+  function showToast(message, type = 'success') {
+    if (!toastContainer) return;
+    
+    if (toastContainer.children.length >= 3) {
+      toastContainer.removeChild(toastContainer.firstChild);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type === 'error' ? 'toast-error' : ''}`;
+    
+    const iconName = type === 'error' ? 'alert-circle' : 'check-circle';
+    toast.innerHTML = `<i data-lucide="${iconName}"></i> <span>${message}</span>`;
+    
+    toastContainer.appendChild(toast);
+    if (window.lucide) lucide.createIcons();
+
+    setTimeout(() => {
+      toast.classList.add('toast-hiding');
+      toast.addEventListener('animationend', () => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      });
+    }, 2800);
+  }
+
+  // -------------------------------------------------------------------------
+  // 2. Camera Stream Lifecycle & Capture Controls
+  // -------------------------------------------------------------------------
+  function stopCameraStream() {
+    if (currentStream) {
+      currentStream.getTracks().forEach(track => track.stop());
+      currentStream = null;
+    }
+    if (cameraVideo) {
+      cameraVideo.srcObject = null;
+    }
+  }
+
+  function closeCameraModal() {
+    stopCameraStream();
+    if (cameraModal) cameraModal.classList.add('hidden');
+    capturedDataURL = '';
+  }
+
+  async function checkMultipleCameras() {
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices && switchCameraBtn) {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(d => d.kind === 'videoinput');
+        if (videoDevices.length > 1) {
+          switchCameraBtn.classList.remove('hidden');
+        } else {
+          switchCameraBtn.classList.add('hidden');
+        }
+      } catch (e) {}
+    }
+  }
+
+  async function startCamera() {
+    stopCameraStream();
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showToast('Camera unavailable on this browser. You can upload a photo instead.', 'error');
+      return;
+    }
+
+    try {
+      const constraints = {
+        video: {
+          facingMode: facingMode,
+          width: { ideal: 1280 },
+          height: { ideal: 960 }
+        },
+        audio: false
+      };
+
+      currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+      cameraVideo.srcObject = currentStream;
+
+      cameraVideo.classList.remove('hidden');
+      cameraSnapshot.classList.add('hidden');
+      faceGuide.classList.remove('hidden');
+      cameraLiveControls.classList.remove('hidden');
+      cameraReviewControls.classList.add('hidden');
+      cameraModal.classList.remove('hidden');
+
+      checkMultipleCameras();
+    } catch (err) {
+      console.warn('Camera access error:', err);
+      stopCameraStream();
+
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        showToast('Camera access was denied. You can upload a photo instead.', 'error');
+      } else {
+        showToast('Camera unavailable. You can upload a photo instead.', 'error');
+      }
+    }
+  }
+
+  function capturePhoto() {
+    if (!cameraVideo || !cameraVideo.videoWidth) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = cameraVideo.videoWidth;
+    canvas.height = cameraVideo.videoHeight;
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+    capturedDataURL = canvas.toDataURL('image/jpeg', 0.92);
+
+    cameraSnapshot.src = capturedDataURL;
+    cameraSnapshot.classList.remove('hidden');
+    cameraVideo.classList.add('hidden');
+    faceGuide.classList.add('hidden');
+
+    cameraLiveControls.classList.add('hidden');
+    cameraReviewControls.classList.remove('hidden');
+  }
+
+  function retakePhoto() {
+    capturedDataURL = '';
+    cameraSnapshot.classList.add('hidden');
+    cameraVideo.classList.remove('hidden');
+    faceGuide.classList.remove('hidden');
+    cameraReviewControls.classList.add('hidden');
+    cameraLiveControls.classList.remove('hidden');
+  }
+
+  function useCapturedPhoto() {
+    if (!capturedDataURL) return;
+
+    rawImageDataURL = capturedDataURL;
+
+    profilePhoto.src = rawImageDataURL;
+    profilePhoto.classList.remove('hidden');
+    photoPlaceholder.classList.add('hidden');
+
+    pfpProfilePhoto.src = rawImageDataURL;
+    pfpProfilePhoto.classList.remove('hidden');
+    pfpPlaceholder.classList.add('hidden');
+
+    imageControls.classList.remove('hidden');
+    resetImageTransform();
+
+    if (dropzonePrimaryText) {
+      dropzonePrimaryText.textContent = '✓ Camera photo applied! Click to change';
+    }
+
+    closeCameraModal();
+    showToast('✓ Photo captured successfully!');
+  }
+
+  // Camera Event Listeners
+  if (openCameraBtn) openCameraBtn.addEventListener('click', startCamera);
+  if (triggerUploadBtn) triggerUploadBtn.addEventListener('click', () => photoInput.click());
+
+  if (closeCameraBtn) closeCameraBtn.addEventListener('click', closeCameraModal);
+  if (cancelCameraBtn) cancelCameraBtn.addEventListener('click', closeCameraModal);
+  if (cameraBackdrop) cameraBackdrop.addEventListener('click', closeCameraModal);
+
+  if (capturePhotoBtn) capturePhotoBtn.addEventListener('click', capturePhoto);
+  if (retakePhotoBtn) retakePhotoBtn.addEventListener('click', retakePhoto);
+  if (usePhotoBtn) usePhotoBtn.addEventListener('click', useCapturedPhoto);
+
+  if (switchCameraBtn) {
+    switchCameraBtn.addEventListener('click', () => {
+      facingMode = facingMode === 'user' ? 'environment' : 'user';
+      startCamera();
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // 3. Text Real-Time Binding & Dynamic Auto-Scaling
+  // -------------------------------------------------------------------------
+  function adjustTextScaling() {
+    const nameText = cardName.textContent || '';
+    if (nameText.length > 26) {
+      cardName.style.fontSize = '1.1rem';
+    } else if (nameText.length > 18) {
+      cardName.style.fontSize = '1.3rem';
+    } else if (nameText.length > 12) {
+      cardName.style.fontSize = '1.45rem';
+    } else {
+      cardName.style.fontSize = '';
+    }
+
+    const roleText = cardRole.textContent || '';
+    if (roleText.length > 32) {
+      cardRole.style.fontSize = '0.75rem';
+    } else if (roleText.length > 22) {
+      cardRole.style.fontSize = '0.85rem';
+    } else {
+      cardRole.style.fontSize = '';
+    }
+  }
+
   nameInput.addEventListener('input', (e) => {
     const val = e.target.value.trim();
     cardName.textContent = val !== '' ? val.toUpperCase() : 'YOUR NAME';
+    adjustTextScaling();
   });
 
   roleInput.addEventListener('input', (e) => {
     const val = e.target.value.trim();
-    cardRole.textContent = val !== '' ? val.toUpperCase() : 'YOUR ROLE';
+    cardRole.textContent = val !== '' ? val.toUpperCase() : 'FULL STACK / AI BUILDER';
+    adjustTextScaling();
   });
 
   titleInput.addEventListener('input', (e) => {
@@ -82,23 +331,60 @@ document.addEventListener('DOMContentLoaded', () => {
     cardTitleBadge.textContent = val !== '' ? val.toUpperCase() : 'BUILDER TITLE';
   });
 
-  randomTitleBtn.addEventListener('click', () => {
-    const randomTitle = funTitles[Math.floor(Math.random() * funTitles.length)];
-    titleInput.value = randomTitle;
-    cardTitleBadge.textContent = randomTitle;
+  // Stack Chip Buttons Quick Select
+  document.querySelectorAll('.stack-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const stackVal = chip.getAttribute('data-stack');
+      if (stackVal) {
+        roleInput.value = stackVal;
+        cardRole.textContent = stackVal;
+        adjustTextScaling();
+        showToast(`Role set to ${stackVal}`);
+      }
+    });
   });
 
-  // 2. Format Switcher (Format B: ID Card vs Format A: PFP)
+  // Randomize Title Action with Non-Repetition & Fast Animation
+  randomTitleBtn.addEventListener('click', () => {
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * funTitles.length);
+    } while (nextIndex === lastTitleIndex && funTitles.length > 1);
+    
+    lastTitleIndex = nextIndex;
+    const randomTitle = funTitles[nextIndex];
+    
+    cardTitleBadge.style.transform = 'scale(1.08) rotate(-1deg)';
+    cardTitleBadge.style.transition = 'transform 0.1s ease';
+    
+    setTimeout(() => {
+      titleInput.value = randomTitle;
+      cardTitleBadge.textContent = randomTitle;
+      cardTitleBadge.style.transform = 'scale(1) rotate(0deg)';
+    }, 100);
+
+    showToast(`Title randomized: ${randomTitle}`);
+  });
+
+  // -------------------------------------------------------------------------
+  // 4. Format Switcher (Format B: Builder ID vs Format A: PFP Frame)
+  // -------------------------------------------------------------------------
   function switchMode(mode) {
     activeMode = mode;
     if (mode === 'idcard') {
       modeIdCardBtn.classList.add('active');
+      modeIdCardBtn.setAttribute('aria-selected', 'true');
       modePfpBtn.classList.remove('active');
+      modePfpBtn.setAttribute('aria-selected', 'false');
+
       idCard.classList.remove('hidden');
       pfpFrame.classList.add('hidden');
     } else {
       modePfpBtn.classList.add('active');
+      modePfpBtn.setAttribute('aria-selected', 'true');
       modeIdCardBtn.classList.remove('active');
+      modeIdCardBtn.setAttribute('aria-selected', 'false');
+
       pfpFrame.classList.remove('hidden');
       idCard.classList.add('hidden');
     }
@@ -107,18 +393,19 @@ document.addEventListener('DOMContentLoaded', () => {
   modeIdCardBtn.addEventListener('click', () => switchMode('idcard'));
   modePfpBtn.addEventListener('click', () => switchMode('pfp'));
 
-  // 3. Photo Upload Handler (supports JPG, PNG, WEBP, and iPhone HEIC)
+  // -------------------------------------------------------------------------
+  // 5. Photo Upload & iPhone HEIC Support
+  // -------------------------------------------------------------------------
   async function handleImageUpload(file) {
     if (!file) return;
 
     let processFile = file;
+    const fileName = file.name.toLowerCase();
 
     // HEIC / HEIF Conversion for iPhone photos
-    const fileName = file.name.toLowerCase();
     if (fileName.endsWith('.heic') || fileName.endsWith('.heif') || file.type === 'image/heic' || file.type === 'image/heif') {
       try {
-        const dropzoneText = dropzone.querySelector('.primary-text');
-        if (dropzoneText) dropzoneText.textContent = 'Converting iPhone HEIC photo...';
+        if (dropzonePrimaryText) dropzonePrimaryText.textContent = 'Converting iPhone HEIC photo...';
         
         if (window.heic2any) {
           const convertedBlob = await heic2any({
@@ -130,6 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (err) {
         console.warn('HEIC conversion fallback:', err);
+        showToast('HEIC image issue, attempting direct load...', 'error');
       }
     }
 
@@ -137,42 +425,45 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.onload = (e) => {
       rawImageDataURL = e.target.result;
       
-      // Update ID Card Profile Photo
       profilePhoto.src = rawImageDataURL;
       profilePhoto.classList.remove('hidden');
       photoPlaceholder.classList.add('hidden');
 
-      // Update PFP Profile Photo
       pfpProfilePhoto.src = rawImageDataURL;
       pfpProfilePhoto.classList.remove('hidden');
       pfpPlaceholder.classList.add('hidden');
 
-      // Reveal Framing Controls
       imageControls.classList.remove('hidden');
-      
-      // Reset position/zoom
       resetImageTransform();
 
-      // Reset dropzone label
-      const dropzoneText = dropzone.querySelector('.primary-text');
-      if (dropzoneText) dropzoneText.textContent = 'Click or drag & drop photo';
+      if (dropzonePrimaryText) {
+        dropzonePrimaryText.textContent = '✓ Photo loaded! Click to change';
+      }
+
+      showToast('Photo loaded successfully!');
+    };
+
+    reader.onerror = () => {
+      showToast('Error loading image file.', 'error');
     };
 
     reader.readAsDataURL(processFile);
   }
 
-  // Input change event
+  // File Input Change
   photoInput.addEventListener('change', (e) => {
     if (e.target.files && e.target.files[0]) {
       handleImageUpload(e.target.files[0]);
     }
   });
 
-  // Click on placeholders directly to trigger file picker
   photoFrame.addEventListener('click', () => photoInput.click());
+  photoFrame.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') photoInput.click(); });
+  
   pfpFrame.addEventListener('click', () => photoInput.click());
+  dropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') photoInput.click(); });
 
-  // 4. Drag & Drop Support
+  // Drag & Drop Handlers
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropzone.addEventListener(eventName, preventDefaults, false);
     document.body.addEventListener(eventName, preventDefaults, false);
@@ -199,9 +490,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 5. Image Scale (Zoom) & Pan Position Controls
+  // -------------------------------------------------------------------------
+  // 6. Image Scale (Zoom) & Pan Position Controls
+  // -------------------------------------------------------------------------
   function updateImageTransform() {
-    const transformStr = `scale(${currentZoom}) translate(${currentPosX}px, ${currentPosY}px)`;
+    const transformStr = `translate(${currentPosX}px, ${currentPosY}px) scale(${currentZoom})`;
     profilePhoto.style.transform = transformStr;
     pfpProfilePhoto.style.transform = transformStr;
   }
@@ -231,49 +524,68 @@ document.addEventListener('DOMContentLoaded', () => {
     updateImageTransform();
   }
 
-  resetPhotoBtn.addEventListener('click', resetImageTransform);
+  resetPhotoBtn.addEventListener('click', () => {
+    resetImageTransform();
+    showToast('Framing reset to center');
+  });
 
-  // 6. High-Resolution Image Export (PNG)
+  // -------------------------------------------------------------------------
+  // 7. High-Resolution PNG Export (html2canvas)
+  // -------------------------------------------------------------------------
   async function generateCanvasImage() {
     const targetElement = activeMode === 'idcard' ? idCard : pfpFrame;
-    return await html2canvas(targetElement, {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: null,
-      logging: false
-    });
+    
+    targetElement.classList.add('exporting');
+    
+    try {
+      const canvas = await html2canvas(targetElement, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        logging: false
+      });
+      targetElement.classList.remove('exporting');
+      return canvas;
+    } catch (err) {
+      targetElement.classList.remove('exporting');
+      throw err;
+    }
   }
 
   async function downloadGraphic() {
     try {
       const activeBtn = downloadBtn;
-      const originalText = activeBtn.innerHTML;
-      activeBtn.innerHTML = `<i data-lucide="loader"></i> Generating PNG...`;
+      const originalHTML = activeBtn.innerHTML;
+      activeBtn.innerHTML = `<i data-lucide="loader"></i> Exporting...`;
       if (window.lucide) lucide.createIcons();
       activeBtn.disabled = true;
 
       const canvas = await generateCanvasImage();
       const imageURI = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      const nameSlug = (nameInput.value || 'builder').toLowerCase().replace(/\s+/g, '-');
-      const modeTag = activeMode === 'idcard' ? 'id-card' : 'pfp-frame';
       
-      link.download = `${nameSlug}-hhgoa2026-${modeTag}.png`;
+      const rawName = nameInput.value.trim() || 'builder';
+      const nameSlug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const modeTag = activeMode === 'idcard' ? 'builder-id' : 'pfp-frame';
+      
+      link.download = `hhgoa2026-${nameSlug}-${modeTag}.png`;
       link.href = imageURI;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      activeBtn.innerHTML = originalText;
+      activeBtn.innerHTML = originalHTML;
       activeBtn.disabled = false;
       if (window.lucide) lucide.createIcons();
+
+      showToast('✓ Identity exported as PNG');
       return imageURI;
     } catch (err) {
       console.error('Download failed:', err);
-      alert('Failed to generate PNG image. Please try again.');
+      showToast('Failed to export PNG. Please try again.', 'error');
       downloadBtn.disabled = false;
-      downloadBtn.innerHTML = `<i data-lucide="download"></i> Download Graphic (PNG)`;
+      downloadBtn.innerHTML = `<i data-lucide="download"></i> Download PNG`;
       if (window.lucide) lucide.createIcons();
       return null;
     }
@@ -282,18 +594,16 @@ document.addEventListener('DOMContentLoaded', () => {
   exportBtn.addEventListener('click', downloadGraphic);
   downloadBtn.addEventListener('click', downloadGraphic);
 
-  // 7. Share Flow to X (Twitter) with hashtag #FrameInGoa
+  // -------------------------------------------------------------------------
+  // 8. Share Flow to X (Twitter) with hashtag #FrameInGoa
+  // -------------------------------------------------------------------------
   async function shareToX() {
-    // Automatically trigger download so user has the graphic file ready to attach to tweet
     await downloadGraphic();
 
-    // Prepare Tweet pre-filled caption with #FrameInGoa
     const titleVal = titleInput.value.trim() || 'Goa Builder';
-    const tweetCaption = `Hyped for Hacker House Goa 2026! 🚀\n\nJust created my ${titleVal} badge using the HH Goa ID Studio! See you in Goa! 🌴\n\n#FrameInGoa`;
+    const tweetCaption = `Hyped for Hacker House Goa 2026! 🚀\n\nJust generated my ${titleVal} identity badge for HH Goa Studio! See you in Goa! 🌴\n\n#FrameInGoa`;
     
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetCaption)}`;
-    
-    // Open Twitter intent popup
     window.open(tweetUrl, '_blank', 'width=600,height=500');
   }
 

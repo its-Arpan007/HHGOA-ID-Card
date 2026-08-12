@@ -1334,24 +1334,24 @@ body {
 /* Dynamic Builder ID & Footer Overlays (Hardcoded Issued 12 Aug 2026) */
 .card-serial-overlay {
   position: absolute;
-  top: 516px;
-  left: 55px;
+  top: 512px;
+  left: 32px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #F5EEDB;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #FFFFFF;
   letter-spacing: 0.5px;
   pointer-events: auto;
 }
 
 .card-footer-issued-overlay {
   position: absolute;
-  top: 544px;
-  right: 20px;
+  top: 543px;
+  right: 22px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.58rem;
   font-weight: 700;
-  color: #8BA894;
+  color: #F5EEDB;
   letter-spacing: 0.5px;
   pointer-events: auto;
 }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Hacker House Goa 2026 — Builder Identity Studio</title>
-  <meta name="description" content="Generate your official Hacker House Goa 2026 Builder ID Card & PFP Frame for social media. #FrameInGoa">
+  <meta name="description" content="Generate your official Hacker House Goa 2026 Builder Pass & PFP Frame for social media. #FrameInGoa">
 
   <!-- Google Fonts: Inter, Outfit & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,7 +54,7 @@
           <span>GOA // 15.2993° N, 74.1240° E</span>
         </div>
         <h2 class="hero-title">BUILD YOUR IDENTITY</h2>
-        <p class="hero-subtitle">Create your official Hacker House Goa 2026 builder identity card or avatar frame.</p>
+        <p class="hero-subtitle">Create your official Hacker House Goa 2026 builder identity pass or avatar frame.</p>
 
         <!-- Mode Selector Cards -->
         <div class="mode-selector-wrapper" role="tablist" aria-label="Creation Mode Selector">
@@ -64,7 +64,7 @@
               <span class="mode-tag">RECOMMENDED</span>
             </div>
             <div class="mode-card-body">
-              <h3>BUILDER ID</h3>
+              <h3>BUILDER PASS</h3>
               <p>Official event identity badge with customized builder title & role</p>
             </div>
             <div class="mode-indicator"></div>
@@ -158,7 +158,7 @@
             <label for="nameInput" class="form-label">Full Name</label>
             <div class="input-wrapper">
               <i data-lucide="user" class="input-icon"></i>
-              <input type="text" id="nameInput" placeholder="e.g. ARPAN KUMAR SINHA" value="" maxlength="36" aria-label="Full name">
+              <input type="text" id="nameInput" placeholder="e.g. ARPAN KUMAR SINHA" value="" maxlength="45" aria-label="Full name">
             </div>
           </div>
 
@@ -167,7 +167,7 @@
             <label for="roleInput" class="form-label">Tech Stack / Role</label>
             <div class="input-wrapper">
               <i data-lucide="code" class="input-icon"></i>
-              <input type="text" id="roleInput" placeholder="e.g. FULL STACK / SOLANA" value="" maxlength="45" aria-label="Tech stack or role">
+              <input type="text" id="roleInput" placeholder="e.g. FULL STACK DEVELOPER / AI/ML ENTHUSIAST" value="" maxlength="60" aria-label="Tech stack or role">
             </div>
             <!-- Preset Stack Chips -->
             <div class="stack-chips-wrapper" aria-label="Quick select tech stack presets">
@@ -219,24 +219,15 @@
 
         <div class="card-display-wrapper">
           
-          <!-- FORMAT B: BUILDER ID CARD ELEMENT -->
+          <!-- OFFICIAL BUILDER PASS CARD DESIGN (New Approved Template 766x1024) -->
           <div id="idCard" class="id-card preview-element">
-            <!-- Background Template Base -->
-            <img src="template.jpg" alt="HH Goa Card Background" class="template-bg-img">
+            
+            <!-- Layer 1: Base Artwork Template (Contains hook, logo, palms, beach art, borders, Builder Pass section, coordinates, verified stamp, access granted pill) -->
+            <img src="template.png?v=20260812_nowhitespace_v8" alt="HH Goa Builder Pass Background" class="template-bg-img">
 
             <div class="card-overlay-content">
-              <!-- Top Branding Metadata Bar -->
-              <div class="card-top-bar">
-                <span class="card-top-brand">HH GOA 2026</span>
-                <span class="card-top-edition">EDITION 026</span>
-              </div>
-
-              <!-- Hacker House Goa Logo -->
-              <div class="card-logo-container">
-                <img src="logo.png" alt="Hacker House Goa" class="card-logo-img">
-              </div>
-
-              <!-- Profile Photo Frame in Sun -->
+              
+              <!-- Layer 2: Circular Profile Photo Container (Single Photo Region) -->
               <div class="photo-container">
                 <div class="photo-frame" id="photoFrame" title="Click to upload or capture photo" tabIndex="0" role="button" aria-label="Click to upload or capture photo">
                   <img id="profilePhoto" src="" alt="Profile Picture" class="profile-img hidden">
@@ -247,23 +238,23 @@
                 </div>
               </div>
 
-              <!-- Name, Stack & Title Section -->
+              <!-- Layer 3, 4, 5: Dynamic Title Badge, Builder Name & Role Section -->
               <div class="user-info">
                 <div id="cardTitleBadge" class="builder-title-pill">🌴 GOA CODE CHAD</div>
-                <h2 id="cardName" class="card-name">BUILDER NAME</h2>
-                <p id="cardRole" class="card-role">FULL STACK / AI BUILDER</p>
+                <div class="name-container">
+                  <h2 id="cardName" class="card-name">ARPAN KUMAR SINHA</h2>
+                </div>
+                <p id="cardRole" class="card-role">FULL STACK DEVELOPER / AI/ML ENTHUSIAST</p>
               </div>
 
-              <!-- Bottom Card Details -->
-              <div class="card-footer-bar">
-                <div class="card-meta">
-                  <span class="meta-tag"><i data-lucide="shield-check"></i> VERIFIED BUILDER</span>
-                  <span class="meta-sub">GOA &bull; MARCH 2026</span>
-                </div>
-                <div class="card-serial-badge">
-                  <span>HHG-2026-BDLR</span>
-                </div>
+              <!-- Layer 6: Dynamic Builder ID Overlay in Builder Pass Section -->
+              <span id="cardSerial" class="card-serial-overlay">HHG-2026-8499</span>
+              
+              <!-- Layer 7: Footer Issued Date & Single Dynamic Serial Overlay (Hardcoded Issued 12 Aug 2026) -->
+              <div class="card-footer-issued-overlay">
+                Issued 12 Aug 2026 &bull; No. <span id="cardFooterSerial">HHG-2026-8499</span>
               </div>
+
             </div>
           </div>
 

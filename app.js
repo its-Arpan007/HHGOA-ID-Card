@@ -2,6 +2,7 @@
  * HACKER HOUSE GOA 2026 - BUILDER IDENTITY & PFP STUDIO
  * Core Logic: Photo Upload, Camera Capture, HEIC Conversion, Dual Format Mode Switching,
  * Dynamic Title Generator, Image Framing, Toast System, PNG Export & X Sharing.
+ * Includes Official Hacker House Goa 2026 Builder Pass Card Layout with Dynamic Text Auto-Scaling.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,16 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const posYSlider = document.getElementById('posYSlider');
   const resetPhotoBtn = document.getElementById('resetPhotoBtn');
 
-  // Display Elements - Format B: ID Card
+  // Display Elements - Builder ID Card
   const idCard = document.getElementById('idCard');
   const cardName = document.getElementById('cardName');
   const cardRole = document.getElementById('cardRole');
   const cardTitleBadge = document.getElementById('cardTitleBadge');
+  const cardSerial = document.getElementById('cardSerial');
+  const cardFooterSerial = document.getElementById('cardFooterSerial');
   const profilePhoto = document.getElementById('profilePhoto');
   const photoPlaceholder = document.getElementById('photoPlaceholder');
   const photoFrame = document.getElementById('photoFrame');
 
-  // Display Elements - Format A: PFP Frame
+  // Display Elements - PFP Frame
   const pfpFrame = document.getElementById('pfpFrame');
   const pfpProfilePhoto = document.getElementById('pfpProfilePhoto');
   const pfpPlaceholder = document.getElementById('pfpPlaceholder');
@@ -79,6 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentStream = null;
   let facingMode = 'user';
   let capturedDataURL = '';
+
+  // Generate Unique Dynamic Builder ID (e.g. HHG-2026-8499)
+  function generateBuilderId() {
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    return `HHG-2026-${randomNum}`;
+  }
+
+  const currentBuilderId = generateBuilderId();
+  if (cardSerial) cardSerial.textContent = currentBuilderId;
+  if (cardFooterSerial) cardFooterSerial.textContent = currentBuilderId;
 
   // Curated Hacker & Builder Titles (30 Titles)
   const funTitles = [
@@ -290,39 +303,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // -------------------------------------------------------------------------
-  // 3. Text Real-Time Binding & Dynamic Auto-Scaling
+  // 3. Text Real-Time Binding & Dynamic Auto-Scaling (Requirements #6 & #7)
   // -------------------------------------------------------------------------
   function adjustTextScaling() {
-    const nameText = cardName.textContent || '';
-    if (nameText.length > 26) {
-      cardName.style.fontSize = '1.1rem';
-    } else if (nameText.length > 18) {
-      cardName.style.fontSize = '1.3rem';
-    } else if (nameText.length > 12) {
-      cardName.style.fontSize = '1.45rem';
+    if (!cardName) return;
+
+    const nameText = (cardName.textContent || '').trim();
+    const len = nameText.length;
+
+    if (len > 34) {
+      cardName.style.fontSize = '0.95rem';
+      cardName.style.letterSpacing = '-0.02em';
+    } else if (len > 25) {
+      cardName.style.fontSize = '1.15rem';
+      cardName.style.letterSpacing = '-0.01em';
+    } else if (len > 18) {
+      cardName.style.fontSize = '1.32rem';
+      cardName.style.letterSpacing = '0em';
+    } else if (len > 12) {
+      cardName.style.fontSize = '1.5rem';
     } else {
-      cardName.style.fontSize = '';
+      cardName.style.fontSize = '1.65rem';
     }
 
-    const roleText = cardRole.textContent || '';
-    if (roleText.length > 32) {
-      cardRole.style.fontSize = '0.75rem';
-    } else if (roleText.length > 22) {
-      cardRole.style.fontSize = '0.85rem';
-    } else {
-      cardRole.style.fontSize = '';
+    if (cardRole) {
+      const roleText = (cardRole.textContent || '').trim();
+      const rLen = roleText.length;
+
+      if (rLen > 38) {
+        cardRole.style.fontSize = '0.72rem';
+      } else if (rLen > 24) {
+        cardRole.style.fontSize = '0.8rem';
+      } else {
+        cardRole.style.fontSize = '0.85rem';
+      }
     }
   }
 
   nameInput.addEventListener('input', (e) => {
     const val = e.target.value.trim();
-    cardName.textContent = val !== '' ? val.toUpperCase() : 'YOUR NAME';
+    cardName.textContent = val !== '' ? val.toUpperCase() : 'ARPAN KUMAR SINHA';
     adjustTextScaling();
   });
 
   roleInput.addEventListener('input', (e) => {
     const val = e.target.value.trim();
-    cardRole.textContent = val !== '' ? val.toUpperCase() : 'FULL STACK / AI BUILDER';
+    cardRole.textContent = val !== '' ? val.toUpperCase() : 'FULL STACK DEVELOPER / AI/ML ENTHUSIAST';
     adjustTextScaling();
   });
 
@@ -366,8 +392,11 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(`Title randomized: ${randomTitle}`);
   });
 
+  // Initial scaling call
+  adjustTextScaling();
+
   // -------------------------------------------------------------------------
-  // 4. Format Switcher (Format B: Builder ID vs Format A: PFP Frame)
+  // 4. Format Switcher (Builder Pass ID Card vs PFP Frame)
   // -------------------------------------------------------------------------
   function switchMode(mode) {
     activeMode = mode;
@@ -567,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const rawName = nameInput.value.trim() || 'builder';
       const nameSlug = rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const modeTag = activeMode === 'idcard' ? 'builder-id' : 'pfp-frame';
+      const modeTag = activeMode === 'idcard' ? 'builder-pass' : 'pfp-frame';
       
       link.download = `hhgoa2026-${nameSlug}-${modeTag}.png`;
       link.href = imageURI;
@@ -601,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
     await downloadGraphic();
 
     const titleVal = titleInput.value.trim() || 'Goa Builder';
-    const tweetCaption = `Hyped for Hacker House Goa 2026! 🚀\n\nJust generated my ${titleVal} identity badge for HH Goa Studio! See you in Goa! 🌴\n\n#FrameInGoa`;
+    const tweetCaption = `Hyped for Hacker House Goa 2026! 🚀\n\nJust generated my ${titleVal} identity pass for HH Goa Studio! See you in Goa! 🌴\n\n#FrameInGoa`;
     
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetCaption)}`;
     window.open(tweetUrl, '_blank', 'width=600,height=500');

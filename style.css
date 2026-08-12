@@ -416,7 +416,7 @@ body {
   font-weight: 600;
 }
 
-/* Mode Selector Cards — Fully Transparent Cards with Glass Outline */
+/* Mode Selector Cards */
 .mode-selector-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -963,7 +963,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scaleX(-1); /* Mirrored selfie preview */
+  transform: scaleX(-1);
 }
 
 .camera-snapshot {
@@ -1074,7 +1074,7 @@ body {
 }
 
 /* ==========================================================================
-   LIVE PREVIEW STAGE — FULLY TRANSPARENT Stage Container
+   LIVE PREVIEW STAGE
    ========================================================================== */
 
 .preview-stage {
@@ -1150,26 +1150,27 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem;
+  padding: 2rem 1.5rem;
   background: transparent;
   overflow: auto;
   position: relative;
 }
 
 /* ==========================================================================
-   FORMAT B: BUILDER ID CARD DESIGN (100% Solid & Opaque Badge Element)
+   FORMAT B: OFFICIAL BUILDER PASS ID CARD DESIGN (766x1024 New Template)
    ========================================================================== */
 
 .id-card {
-  width: 440px;
+  width: 420px;
+  height: 561px; /* aspect ratio matching reference template 766x1024 */
   position: relative;
-  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85), 0 0 24px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.88), 0 0 30px rgba(16, 185, 129, 0.25);
   user-select: none;
   flex-shrink: 0;
   border-radius: 32px;
   overflow: hidden;
   display: inline-block;
-  background: #000000;
+  background: #04120B;
   transition: transform var(--transition-normal);
 }
 
@@ -1179,9 +1180,11 @@ body {
   transform: none !important;
 }
 
+/* Card Artwork Base Template */
 .template-bg-img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   pointer-events: none;
 }
@@ -1190,73 +1193,26 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Top Branding metadata bar */
-.card-top-bar {
-  position: absolute;
-  top: 22px;
-  left: 28px;
-  right: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 25;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.75);
-  letter-spacing: 1px;
-}
-
-.card-top-brand {
-  color: var(--hacker-yellow);
-}
-
-.card-top-edition {
-  background: rgba(0, 0, 0, 0.45);
-  padding: 2px 8px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Hacker House Goa Logo */
-.card-logo-container {
-  position: absolute;
-  top: 56px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 25;
-  text-align: center;
-  pointer-events: none;
-}
-
-.card-logo-img {
-  width: 145px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.6));
-}
-
-/* Profile Photo Frame in Sun */
+/* Profile Photo Circular Frame (Single Photo Region) */
 .photo-container {
   position: absolute;
-  top: 47%;
+  top: 201px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 20;
   pointer-events: auto;
 }
 
 .photo-frame {
-  width: 190px;
-  height: 190px;
+  width: 168px;
+  height: 168px;
   border-radius: 50%;
-  border: 5px solid var(--primary-green);
-  background-color: #FFFFFF;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  border: 4px solid #10B981;
+  outline: 3px solid #EAD7A0;
+  background-color: #F1F8F4;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 18px rgba(16, 185, 129, 0.3);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -1269,7 +1225,7 @@ body {
 .photo-frame:hover {
   transform: scale(1.02);
   border-color: var(--neon-green);
-  box-shadow: 0 14px 40px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 14px 36px rgba(16, 185, 129, 0.45);
 }
 
 .profile-img {
@@ -1284,21 +1240,21 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  color: var(--primary-green);
+  gap: 5px;
+  color: #0D5C3A;
   width: 100%;
   height: 100%;
   background: #F1F8F4;
 }
 
 .photo-placeholder i {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
 }
 
 .photo-placeholder span {
   font-family: 'Outfit', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1307,10 +1263,10 @@ body {
 /* User Info & Builder Title Pill */
 .user-info {
   position: absolute;
-  top: 70.5%;
+  top: 372px;
   left: 50%;
   transform: translateX(-50%);
-  width: 88%;
+  width: 90%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1320,106 +1276,88 @@ body {
 }
 
 .builder-title-pill {
-  background: linear-gradient(135deg, #0D5C3A, #073B24);
-  color: var(--hacker-yellow);
-  border: 2px solid var(--hacker-yellow);
+  background: #08291A;
+  color: #EAD7A0;
+  border: 1.5px solid #EAD7A0;
   border-radius: 20px;
-  padding: 4px 16px;
+  padding: 3px 14px;
   font-family: 'Outfit', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 6px;
-  box-shadow: 0 4px 14px rgba(13, 92, 58, 0.35);
-  max-width: 340px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  max-width: 320px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   transition: all var(--transition-fast);
 }
 
+/* Dynamic Name Container & Auto-scaling */
+.name-container {
+  width: 100%;
+  max-width: 370px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  margin-bottom: 2px;
+}
+
 .card-name {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.55rem;
   font-weight: 900;
-  color: var(--primary-green);
+  color: #F5EEDB;
   text-transform: uppercase;
   letter-spacing: -0.01em;
   line-height: 1.15;
-  margin-bottom: 2px;
   word-break: break-word;
-  max-width: 380px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  transition: font-size 0.15s ease;
 }
 
 .card-role {
   font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #475569;
+  color: #C2D6C8;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   word-break: break-word;
-  max-width: 380px;
-  line-height: 1.35;
+  max-width: 370px;
+  line-height: 1.3;
 }
 
-/* Bottom Card Footer Bar */
-.card-footer-bar {
+/* Dynamic Builder ID & Footer Overlays (Hardcoded Issued 12 Aug 2026) */
+.card-serial-overlay {
   position: absolute;
-  bottom: 22px;
-  left: 28px;
-  right: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 25;
+  top: 516px;
+  left: 55px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #F5EEDB;
+  letter-spacing: 0.5px;
   pointer-events: auto;
 }
 
-.card-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
+.card-footer-issued-overlay {
+  position: absolute;
+  top: 544px;
+  right: 20px;
   font-family: 'JetBrains Mono', monospace;
-}
-
-.meta-tag {
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   font-weight: 700;
-  color: var(--primary-green);
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  color: #8BA894;
   letter-spacing: 0.5px;
-}
-
-.meta-tag i {
-  width: 12px;
-  height: 12px;
-}
-
-.meta-sub {
-  font-size: 0.6rem;
-  color: #64748B;
-  letter-spacing: 0.5px;
-}
-
-.card-serial-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--primary-green);
-  background: rgba(13, 92, 58, 0.1);
-  border: 1px solid rgba(13, 92, 58, 0.25);
-  padding: 3px 8px;
-  border-radius: 6px;
-  letter-spacing: 1px;
+  pointer-events: auto;
 }
 
 /* ==========================================================================
-   FORMAT A: PFP FRAME OVERLAY DESIGN (100% Solid & Opaque Badge Element)
+   FORMAT A: PFP FRAME OVERLAY DESIGN (100% Solid & Crisp Badge Element)
    ========================================================================== */
 
 .pfp-card {
@@ -1733,60 +1671,47 @@ body {
   }
 
   .id-card {
-    width: min(440px, 92vw);
+    width: min(420px, 92vw);
+    height: calc(min(420px, 92vw) * 1.3368);
     border-radius: min(32px, 7vw);
   }
 
-  .card-top-bar {
-    top: min(22px, 4.8vw);
-    left: min(28px, 6vw);
-    right: min(28px, 6vw);
-    font-size: clamp(0.55rem, 2.4vw, 0.68rem);
-  }
-
-  .card-logo-container {
-    top: 9%;
-  }
-
-  .card-logo-img {
-    width: min(145px, 32vw);
-  }
-
   .photo-container {
-    top: 47%;
+    top: 35.8%;
   }
 
   .photo-frame {
-    width: min(190px, 42vw);
-    height: min(190px, 42vw);
+    width: min(168px, 38vw);
+    height: min(168px, 38vw);
   }
 
   .user-info {
-    top: 70.5%;
+    top: 66.3%;
   }
 
   .card-name {
-    font-size: clamp(1.1rem, 5.2vw, 1.6rem);
+    font-size: clamp(1.1rem, 5.2vw, 1.55rem);
   }
 
   .card-role {
-    font-size: clamp(0.75rem, 3.4vw, 0.95rem);
+    font-size: clamp(0.7rem, 3.2vw, 0.82rem);
   }
 
   .builder-title-pill {
-    font-size: clamp(0.65rem, 2.8vw, 0.8rem);
+    font-size: clamp(0.65rem, 2.8vw, 0.75rem);
     padding: 3px 10px;
   }
 
-  .card-footer-bar {
-    bottom: min(22px, 4.5vw);
-    left: min(28px, 6vw);
-    right: min(28px, 6vw);
+  .card-serial-overlay {
+    top: 89.8%;
+    left: 15vw;
+    font-size: clamp(0.65rem, 2.8vw, 0.82rem);
   }
 
-  .card-serial-badge {
-    font-size: clamp(0.55rem, 2.4vw, 0.65rem);
-    padding: 2px 6px;
+  .card-footer-issued-overlay {
+    top: 95.3%;
+    right: 5vw;
+    font-size: clamp(0.48rem, 2.2vw, 0.58rem);
   }
 
   /* Responsive PFP Card */
